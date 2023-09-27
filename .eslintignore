@@ -1,0 +1,13 @@
+# Ignore built files
+/build
+/dist
+
+# Ignore test files
+/test
+
+# Ignore node_modules
+node_modules
+
+# Ignore temporary files
+.cache
+.tmp

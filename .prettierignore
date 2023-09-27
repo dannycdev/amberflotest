@@ -1,0 +1,20 @@
+# Dependency directories
+node_modules
+
+# Configuration files
+package-lock.json
+yarn.lock
+
+# Miscellaneous
+*.log
+*.pid
+*.seed
+*.swp
+
+# IDE specific
+.vscode
+.idea
+
+# System files
+.DS_Store
+Thumbs.db
