@@ -3,13 +3,22 @@ import { Meter, MeterPostData } from '../utils/types'
 import { useAsync } from './useAsync'
 
 export const useMeter = () => {
+  const fetchMeterAsync = async (id: string) => {
+    const response = await fetch(`${process.env.REACT_APP_BASE_URL}/meters/${id}`, {
+      method: 'GET',
+      headers: COMMON_HEADER,
+    })
+    if (!response.ok) throw new Error('Failed to fetch meters')
+    return response.json() as unknown as Meter
+  }
+
   const fetchMetersAsync = async () => {
     const response = await fetch(`${process.env.REACT_APP_BASE_URL}/meters`, {
       method: 'GET',
       headers: COMMON_HEADER,
     })
     if (!response.ok) throw new Error('Failed to fetch meters')
-    return response.json()
+    return response.json() as unknown as Meter[]
   }
 
   const addMeterAsync = async (meter: MeterPostData) => {
@@ -22,7 +31,7 @@ export const useMeter = () => {
     return response.json()
   }
 
-  const updateMeterAsync = async (id: number, updatedMeter: Partial<MeterPostData>) => {
+  const updateMeterAsync = async (id: string, updatedMeter: Partial<MeterPostData>) => {
     const response = await fetch(`${process.env.REACT_APP_BASE_URL}/meters/${id}`, {
       method: 'PUT',
       headers: COMMON_HEADER,
@@ -32,7 +41,7 @@ export const useMeter = () => {
     return response.json()
   }
 
-  const deleteMeterAsync = async (id: number) => {
+  const deleteMeterAsync = async (id: string) => {
     const response = await fetch(`${process.env.REACT_APP_BASE_URL}/meters/${id}`, {
       method: 'DELETE',
       headers: COMMON_HEADER,
@@ -40,6 +49,13 @@ export const useMeter = () => {
     if (!response.ok) throw new Error('Failed to delete meter')
     return id
   }
+
+  const {
+    data: meter,
+    isLoading: isFetchingMeter,
+    error: fetchMeterError,
+    execute: fetchMeterWrapper,
+  } = useAsync<Meter>(fetchMeterAsync)
 
   const {
     data: meters,
@@ -62,13 +78,17 @@ export const useMeter = () => {
     execute: deleteMeterWrapper,
   } = useAsync(deleteMeterAsync)
 
-  const addMeter = (title: string) => addMeterWrapper(title)
-  const updateMeter = (id: number, updatedMeter: Partial<Meter>) => updateMeterWrapper(id, updatedMeter)
-  const deleteMeter = (id: number) => deleteMeterWrapper(id)
+  const fetchMeter = (id: string) => fetchMeterWrapper(id)
+  const addMeter = (meterData: MeterPostData) => addMeterWrapper(meterData)
+  const updateMeter = (id: string, updatedMeter: Partial<MeterPostData>) => updateMeterWrapper(id, updatedMeter)
+  const deleteMeter = (id: string) => deleteMeterWrapper(id)
 
   return {
+    meter,
     meters,
+    isFetchingMeter,
     isFetchingMeters,
+    fetchMeterError,
     fetchMetersError,
     isAddingMeter,
     addMeterError,
@@ -76,6 +96,7 @@ export const useMeter = () => {
     updateMeterError,
     isDeletingMeter,
     deleteMeterError,
+    fetchMeter,
     fetchMeters,
     addMeter,
     updateMeter,

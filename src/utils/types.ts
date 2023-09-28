@@ -1,10 +1,5 @@
-export interface Meter {
+export interface Meter extends MeterPostData {
   id: string
-  api_name: string
-  display_name: string
-  active: boolean
-  used_for_billing: boolean
-  type: 'sum' | 'max' | 'unique_count'
   updated_time: string
   created_time: string
 }
@@ -14,5 +9,11 @@ export interface MeterPostData {
   display_name: string
   active: boolean
   used_for_billing: boolean
-  type: 'sum' | 'max' | 'unique_count'
+  type: MeterType
+}
+
+export enum MeterType {
+  SUM = 'sum',
+  MAX = 'max',
+  UNIQUE_COUNT = 'unique_count',
 }
