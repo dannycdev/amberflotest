@@ -1,28 +1,25 @@
-import "./App.css";
+import './App.css'
 
-import React from "react";
+import React from 'react'
+import { Route, Routes } from 'react-router-dom'
 
-import logo from "./logo.svg";
+import { DefaultLayout } from './layouts'
+import { MeterCreateEditPage, MeterDetailsPage, MeterListPage, NotFoundPage } from './pages'
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    <Routes>
+      <Route path="/" element={<DefaultLayout />}>
+        <Route index element={<MeterListPage />} />
+        <Route path="meters">
+          <Route path="create" element={<MeterCreateEditPage />} />
+          <Route path=":meterId" element={<MeterDetailsPage />} />
+          <Route path=":meterId/edit" element={<MeterCreateEditPage />} />
+        </Route>
+        <Route path="*" element={<NotFoundPage />} />
+      </Route>
+    </Routes>
+  )
 }
 
-export default App;
+export default App
