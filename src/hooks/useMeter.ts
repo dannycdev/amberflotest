@@ -4,7 +4,10 @@ import { useAsync } from './useAsync'
 
 export const useMeter = () => {
   const fetchMetersAsync = async () => {
-    const response = await fetch(`${process.env.REACT_APP_BASE_URL}/meters`)
+    const response = await fetch(`${process.env.REACT_APP_BASE_URL}/meters`, {
+      method: 'GET',
+      headers: COMMON_HEADER,
+    })
     if (!response.ok) throw new Error('Failed to fetch meters')
     return response.json()
   }

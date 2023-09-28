@@ -1,10 +1,10 @@
 import React from 'react'
+import { Navbar, NavbarText } from 'reactstrap'
 
 export const Footer = () => (
-  <div>
-    <hr />
-    <nav>
-      <p>Amberflo 2023</p>
-    </nav>
-  </div>
+  <Navbar className="my-2" color="dark" dark>
+    <NavbarText></NavbarText>
+    <NavbarText>Amberflo 2023</NavbarText>
+    <NavbarText></NavbarText>
+  </Navbar>
 )
