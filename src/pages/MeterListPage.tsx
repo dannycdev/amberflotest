@@ -1,14 +1,24 @@
 import React, { useEffect } from 'react'
 
-import { AlertMessage, Loading, MeterTable } from '../components'
-import { useMeter } from '../hooks'
+import { AlertMessage, Loading, MeterListTable } from '../components'
+import { useMeter, useMetersContext } from '../hooks'
 
 export const MeterListPage = () => {
+  const { meters: metersState, setMeters } = useMetersContext()
   const { meters, fetchMeters, isFetchingMeters, fetchMetersError } = useMeter()
 
   useEffect(() => {
+    if (metersState) return
+
     fetchMeters()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
+  useEffect(() => {
+    if (!meters) return
+
+    setMeters([...meters])
+  }, [meters, setMeters])
 
   if (isFetchingMeters) {
     return <Loading />
@@ -18,13 +28,13 @@ export const MeterListPage = () => {
     return <AlertMessage message={fetchMetersError.message} />
   }
 
-  if (!meters || meters?.length === 0) {
+  if (!metersState || metersState?.length === 0) {
     return <div>No content</div>
   }
 
   return (
     <div>
-      <MeterTable meters={meters} />
+      <MeterListTable meters={metersState} />
     </div>
   )
 }

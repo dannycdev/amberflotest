@@ -25,7 +25,6 @@ export function useAsync<T>(asyncFunction: (...args: any[]) => Promise<T>) {
         })
         .catch((error: Error) => {
           setState({ data: null, error, isLoading: false })
-          throw error
         })
     },
     [asyncFunction]

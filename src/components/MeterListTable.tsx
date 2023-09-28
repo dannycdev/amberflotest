@@ -4,11 +4,11 @@ import { Table } from 'reactstrap'
 import { Meter } from '../utils/types'
 import { MeterItem } from './MeterItem'
 
-interface MeterTableProps {
+interface MeterListTableProps {
   meters: Meter[]
 }
 
-export const MeterTable = ({ meters }: MeterTableProps) => {
+export const MeterListTable = ({ meters }: MeterListTableProps) => {
   return (
     <Table striped>
       <TableHeader />

@@ -3,15 +3,6 @@ import { Meter, MeterPostData } from '../utils/types'
 import { useAsync } from './useAsync'
 
 export const useMeter = () => {
-  const fetchMeterAsync = async (id: string) => {
-    const response = await fetch(`${process.env.REACT_APP_BASE_URL}/meters/${id}`, {
-      method: 'GET',
-      headers: COMMON_HEADER,
-    })
-    if (!response.ok) throw new Error('Failed to fetch meters')
-    return response.json() as unknown as Meter
-  }
-
   const fetchMetersAsync = async () => {
     const response = await fetch(`${process.env.REACT_APP_BASE_URL}/meters`, {
       method: 'GET',
@@ -51,13 +42,6 @@ export const useMeter = () => {
   }
 
   const {
-    data: meter,
-    isLoading: isFetchingMeter,
-    error: fetchMeterError,
-    execute: fetchMeterWrapper,
-  } = useAsync<Meter>(fetchMeterAsync)
-
-  const {
     data: meters,
     isLoading: isFetchingMeters,
     error: fetchMetersError,
@@ -78,17 +62,13 @@ export const useMeter = () => {
     execute: deleteMeterWrapper,
   } = useAsync(deleteMeterAsync)
 
-  const fetchMeter = (id: string) => fetchMeterWrapper(id)
   const addMeter = (meterData: MeterPostData) => addMeterWrapper(meterData)
   const updateMeter = (id: string, updatedMeter: Partial<MeterPostData>) => updateMeterWrapper(id, updatedMeter)
   const deleteMeter = (id: string) => deleteMeterWrapper(id)
 
   return {
-    meter,
     meters,
-    isFetchingMeter,
     isFetchingMeters,
-    fetchMeterError,
     fetchMetersError,
     isAddingMeter,
     addMeterError,
@@ -96,7 +76,6 @@ export const useMeter = () => {
     updateMeterError,
     isDeletingMeter,
     deleteMeterError,
-    fetchMeter,
     fetchMeters,
     addMeter,
     updateMeter,

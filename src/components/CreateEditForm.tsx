@@ -1,10 +1,10 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Button, Form, FormGroup, Input, Label } from 'reactstrap'
 
-import { useMeter } from '../hooks'
+import { useMeter, useMetersContext } from '../hooks'
 import { DEFAULT_METER_POST_DATA } from '../utils/constants'
-import { MeterPostData, MeterType } from '../utils/types'
-import { isValidMeterPostData, MeterToMeterPostData } from '../utils/utils'
+import { Meter, MeterPostData, MeterType } from '../utils/types'
+import { getMeterPostDataFromMeter, isValidMeterPostData } from '../utils/utils'
 import { AlertMessage } from './AlertMessage'
 
 interface CreateEditFormProps {
@@ -15,32 +15,15 @@ interface CreateEditFormProps {
 }
 
 export const CreateEditForm = ({ meterId, onSubmit, isAddingOrUpdating, hasAddOrUpdateError }: CreateEditFormProps) => {
-  const {
-    meter,
-    isFetchingMeter,
-    fetchMeterError,
-
-    fetchMeter,
-  } = useMeter()
+  const { meters: metersState, setMeters } = useMetersContext()
+  const { meters, fetchMeters, isFetchingMeters, fetchMetersError } = useMeter()
 
   const [meterData, setMeterData] = useState<MeterPostData>(DEFAULT_METER_POST_DATA)
 
-  const isCreating = !meterId
+  const isUpdating = !!meterId
   const isValidData = isValidMeterPostData(meterData)
-  const isLoading = isFetchingMeter || isAddingOrUpdating
-  const hasError = !!fetchMeterError || hasAddOrUpdateError
-
-  const fetchMeterData = useCallback(async (id: string) => {
-    await fetchMeter(id)
-
-    if (meter) setMeterData(MeterToMeterPostData(meter))
-  }, [])
-
-  useEffect(() => {
-    if (isCreating) return
-
-    fetchMeterData(meterId)
-  }, [])
+  const isLoading = isFetchingMeters || isAddingOrUpdating
+  const hasError = !!fetchMetersError || hasAddOrUpdateError
 
   const handleChange = (
     fieldName: string,
@@ -79,6 +62,25 @@ export const CreateEditForm = ({ meterId, onSubmit, isAddingOrUpdating, hasAddOr
     if (isValidData) onSubmit(meterData)
   }
 
+  useEffect(() => {
+    if (!isUpdating || metersState) return
+
+    fetchMeters()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  useEffect(() => {
+    if (!meters) return
+
+    setMeters([...meters])
+  }, [meters, setMeters])
+
+  useEffect(() => {
+    const meter: Meter | undefined = metersState?.find(meter => meter.id === meterId)
+
+    if (meter) setMeterData(getMeterPostDataFromMeter(meter))
+  }, [meterId, metersState])
+
   if (hasError) {
     return <AlertMessage message="There is an error. Please try again." />
   }
@@ -111,7 +113,7 @@ export const CreateEditForm = ({ meterId, onSubmit, isAddingOrUpdating, hasAddOr
         <Input
           type="switch"
           checked={!!meterData.active}
-          onClick={e => handleChange('active', e)}
+          onChange={e => handleChange('active', e)}
           disabled={isLoading}
         />
         <Label check>Active</Label>
@@ -120,7 +122,7 @@ export const CreateEditForm = ({ meterId, onSubmit, isAddingOrUpdating, hasAddOr
         <Input
           type="switch"
           checked={!!meterData.used_for_billing}
-          onClick={e => handleChange('used_for_billing', e)}
+          onChange={e => handleChange('used_for_billing', e)}
           disabled={isLoading}
         />
         <Label check>Used For Billing</Label>
