@@ -25,9 +25,11 @@ export const MeterCreateEditPage = () => {
 
     setMeters(undefined)
 
-    setTimeout(() => {
+    if (isUpdating) {
+      navigate(`/meters/${meterId}`)
+    } else {
       navigate('/')
-    }, 3000)
+    }
   }
 
   return (

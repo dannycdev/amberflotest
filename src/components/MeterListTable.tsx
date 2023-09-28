@@ -1,14 +1,15 @@
 import React from 'react'
-import { Table } from 'reactstrap'
+import { Button, Table } from 'reactstrap'
 
 import { Meter } from '../utils/types'
 import { MeterItem } from './MeterItem'
 
 interface MeterListTableProps {
   meters: Meter[]
+  onDelete: (meterId: string) => void
 }
 
-export const MeterListTable = ({ meters }: MeterListTableProps) => {
+export const MeterListTable = ({ meters, onDelete }: MeterListTableProps) => {
   return (
     <Table striped>
       <TableHeader />
@@ -17,6 +18,11 @@ export const MeterListTable = ({ meters }: MeterListTableProps) => {
           <tr key={meter.id}>
             <td>{index + 1}</td>
             <MeterItem meter={meter} />
+            <td>
+              <Button color="danger" onClick={() => onDelete(meter.id)}>
+                Delete
+              </Button>
+            </td>
           </tr>
         ))}
       </tbody>
@@ -34,6 +40,7 @@ const TableHeader = () => {
         <th>Active</th>
         <th>Used For Billing</th>
         <th>Type</th>
+        <th>Action</th>
       </tr>
     </thead>
   )

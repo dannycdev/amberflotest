@@ -5,7 +5,13 @@ import { useMeter, useMetersContext } from '../hooks'
 
 export const MeterListPage = () => {
   const { meters: metersState, setMeters } = useMetersContext()
-  const { meters, fetchMeters, isFetchingMeters, fetchMetersError } = useMeter()
+  const { meters, fetchMeters, isFetchingMeters, fetchMetersError, deleteMeter, isDeletingMeter, deleteMeterError } =
+    useMeter()
+
+  const onDelete = (meterId: string) => {
+    deleteMeter(meterId)
+    fetchMeters()
+  }
 
   useEffect(() => {
     if (metersState) return
@@ -20,7 +26,7 @@ export const MeterListPage = () => {
     setMeters([...meters])
   }, [meters, setMeters])
 
-  if (isFetchingMeters) {
+  if (isFetchingMeters || isDeletingMeter) {
     return <Loading />
   }
 
@@ -34,7 +40,8 @@ export const MeterListPage = () => {
 
   return (
     <div>
-      <MeterListTable meters={metersState} />
+      {deleteMeterError && <AlertMessage message={deleteMeterError.message} />}
+      <MeterListTable meters={metersState} onDelete={onDelete} />
     </div>
   )
 }
