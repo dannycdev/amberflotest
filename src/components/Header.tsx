@@ -8,16 +8,20 @@ export const Header = () => {
   const toggle = () => setIsOpen(!isOpen)
 
   return (
-    <Navbar className="my-2" color="dark" dark>
+    <Navbar className="my-2" color="dark" dark expand="md">
       <NavbarBrand href="/">Amberflo</NavbarBrand>
       <NavbarToggler onClick={toggle} />
       <Collapse isOpen={isOpen} navbar>
         <Nav className="me-auto" navbar>
           <NavItem>
-            <Link to="/">Home</Link>
+            <Link className="navItemLink" to="/">
+              Home
+            </Link>
           </NavItem>
           <NavItem>
-            <Link to="/meters/create">Create</Link>
+            <Link className="navItemLink" to="/meters/create">
+              Create
+            </Link>
           </NavItem>
         </Nav>
       </Collapse>

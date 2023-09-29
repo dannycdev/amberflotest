@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from 'react'
 import { Button, Table } from 'reactstrap'
 
+import { DEFAULT_METER_IDS } from '../utils/constants'
 import { Meter } from '../utils/types'
 import { MeterItem } from './MeterItem'
 
@@ -50,17 +51,21 @@ export const MeterListTable = ({ meters, onDelete }: MeterListTableProps) => {
     <Table striped>
       <TableHeader onSort={onSort} sortConfig={sortConfig} />
       <tbody>
-        {sortedMeters.map((meter, index) => (
-          <tr key={meter.id}>
-            <td>{index + 1}</td>
-            <MeterItem meter={meter} />
-            <td>
-              <Button color="danger" onClick={() => onDelete(meter.id)}>
-                Delete
-              </Button>
-            </td>
-          </tr>
-        ))}
+        {sortedMeters.map((meter, index) => {
+          const isDefaultData = DEFAULT_METER_IDS.includes(meter.id)
+
+          return (
+            <tr key={meter.id}>
+              <td>{index + 1}</td>
+              <MeterItem meter={meter} />
+              <td>
+                <Button color="danger" onClick={() => onDelete(meter.id)} disabled={isDefaultData}>
+                  Delete
+                </Button>
+              </td>
+            </tr>
+          )
+        })}
       </tbody>
     </Table>
   )

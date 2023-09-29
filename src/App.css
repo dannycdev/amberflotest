@@ -30,6 +30,18 @@
 
 .main {
   min-height: calc(100vh - 136px);
+  overflow: auto;
+}
+
+.navItemLink {
+  color: #fff;
+  width: 60px;
+  display: inline-block;
+  text-decoration: none;
+}
+
+.navItemLink:hover {
+  color: #538caf;
 }
 
 .sortable {

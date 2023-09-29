@@ -4,6 +4,7 @@ import { Button } from 'reactstrap'
 
 import { AlertMessage, Loading, MeterDetailsTable } from '../components'
 import { useMeter, useMetersContext } from '../hooks'
+import { DEFAULT_METER_IDS } from '../utils/constants'
 import { Meter } from '../utils/types'
 
 export const MeterDetailsPage = () => {
@@ -15,6 +16,8 @@ export const MeterDetailsPage = () => {
     () => metersState?.find(meter => meter.id === meterId),
     [meterId, metersState]
   )
+
+  const isDefaultData = !!meterId && DEFAULT_METER_IDS.includes(meterId)
 
   useEffect(() => {
     if (metersState) return
@@ -44,9 +47,11 @@ export const MeterDetailsPage = () => {
   return (
     <>
       <MeterDetailsTable meter={meter} />
-      <Link to={`/meters/${meterId}/edit`}>
-        <Button>Edit Item</Button>
-      </Link>
+      {!isDefaultData && (
+        <Link to={`/meters/${meterId}/edit`}>
+          <Button color="primary">Edit Item</Button>
+        </Link>
+      )}
     </>
   )
 }

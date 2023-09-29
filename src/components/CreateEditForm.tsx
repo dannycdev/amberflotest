@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Button, Form, FormGroup, Input, Label } from 'reactstrap'
 
 import { useMeter, useMetersContext } from '../hooks'
-import { DEFAULT_METER_POST_DATA } from '../utils/constants'
+import { DEFAULT_METER_IDS, DEFAULT_METER_POST_DATA } from '../utils/constants'
 import { Meter, MeterPostData, MeterType } from '../utils/types'
 import { getMeterPostDataFromMeter, isValidMeterPostData } from '../utils/utils'
 import { AlertMessage } from './AlertMessage'
@@ -22,6 +22,7 @@ export const CreateEditForm = ({ meterId, onSubmit, isAddingOrUpdating, hasAddOr
 
   const isUpdating = !!meterId
   const isValidData = isValidMeterPostData(meterData)
+  const isDefaultData = !!meterId && DEFAULT_METER_IDS.includes(meterId)
   const isLoading = isFetchingMeters || isAddingOrUpdating
   const hasError = !!fetchMetersError || hasAddOrUpdateError
 
@@ -142,7 +143,9 @@ export const CreateEditForm = ({ meterId, onSubmit, isAddingOrUpdating, hasAddOr
           ))}
         </Input>
       </FormGroup>
-      <Button disabled={isLoading || !isValidData}>{isLoading ? 'Loading' : 'Submit'}</Button>
+      <Button color="primary" disabled={isLoading || !isValidData || isDefaultData}>
+        {isLoading ? 'Loading' : 'Submit'}
+      </Button>
     </Form>
   )
 }
