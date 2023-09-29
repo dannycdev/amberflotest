@@ -32,6 +32,15 @@
   min-height: calc(100vh - 136px);
 }
 
+.sortable {
+  cursor: pointer;
+}
+
+.sortable:hover {
+  background: #545556;
+  color: #fff;
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
